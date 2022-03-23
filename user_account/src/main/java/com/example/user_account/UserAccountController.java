@@ -26,7 +26,7 @@ public class UserAccountController {
         return userAccountService.getUserAccountById(userAccountId);
     }
 
-    @PostMapping(path = "{registration}")
+    @PostMapping(path = "registration")
     public void registerUserAccount(@RequestBody UserAccountRegistrationRequest userAccountRegistrationRequest) {
         userAccountService.registerUserAccount(userAccountRegistrationRequest);
     }
