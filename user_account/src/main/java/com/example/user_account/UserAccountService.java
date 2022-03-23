@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -25,13 +26,13 @@ public class UserAccountService {
     }
 
     public UserAccount getUserAccountById(Long userAccountId) {
-        log.info("Get user account by id {}", userAccountId);
+        log.info("Get user account by id: {}", userAccountId);
         return userAccountRepository.findById(userAccountId)
                 .orElseThrow(() -> new UserAccountNotExistException(userAccountId));
     }
 
     public void registerUserAccount(UserAccountRegistrationRequest userAccountRegistrationRequest) {
-        log.info("Register new user account {}", userAccountRegistrationRequest);
+        log.info("Register new user account: {}", userAccountRegistrationRequest);
         String requestedEmail = userAccountRegistrationRequest.getEmail();
         if (userAccountRepository.existsByEmail(requestedEmail)) {
             throw new UserAccountEmailConflictException(requestedEmail);
@@ -47,7 +48,7 @@ public class UserAccountService {
     }
 
     public UserAccount updateUserAccountById(Long userAccountId, String newName, String newEmail) {
-        log.info("Update user account by id {}: new name: {}, new email: {}", userAccountId, newName, newEmail);
+        log.info("Update user account by id: {}, new name: {}, new email: {}", userAccountId, newName, newEmail);
         UserAccount userAccount = userAccountRepository.findById(userAccountId)
                 .orElseThrow(() -> new UserAccountNotExistException(userAccountId));
         if (newName != null && newName.length() > 0 && !Objects.equals(newName, userAccount.getName())) {
@@ -63,7 +64,7 @@ public class UserAccountService {
     }
 
     public void deleteUserAccountById(Long userAccountId) {
-        log.info("Delete user account by id {}", userAccountId);
+        log.info("Delete user account by id: {}", userAccountId);
         if (!userAccountRepository.existsById(userAccountId)) {
             throw new UserAccountNotExistException(userAccountId);
         }
