@@ -36,11 +36,12 @@ public class UserAccountService {
         if (userAccountRepository.existsByEmail(requestedEmail)) {
             throw new UserAccountEmailConflictException(requestedEmail);
         }
+        LocalDateTime requestDateTime = LocalDateTime.now();
         UserAccount userAccount = UserAccount.builder()
                 .name(userAccountRegistrationRequest.getName())
                 .email(userAccountRegistrationRequest.getEmail())
-                .dateTimeCreated(LocalDateTime.now())
-                .dateTimeUpdated(LocalDateTime.now())
+                .dateTimeCreated(requestDateTime)
+                .dateTimeUpdated(requestDateTime)
                 .build();
         userAccountRepository.saveAndFlush(userAccount);
     }
