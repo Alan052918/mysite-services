@@ -48,7 +48,6 @@ public class UserAccountService {
         userAccountRepository.saveAndFlush(userAccount);
     }
 
-    @Transactional
     public UserAccount updateUserAccountById(Long userAccountId, String newName, String newEmail) {
         log.info("Update user account by id: {}, new name: {}, new email: {}", userAccountId, newName, newEmail);
         UserAccount userAccount = userAccountRepository.findById(userAccountId)
@@ -63,6 +62,7 @@ public class UserAccountService {
             }
             userAccount.setEmail(newEmail);
         }
+        userAccountRepository.saveAndFlush(userAccount);
         return userAccount;
     }
 
