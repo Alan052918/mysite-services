@@ -30,7 +30,7 @@ public class UserAccountService {
                 .orElseThrow(() -> new UserAccountNotExistException(userAccountId));
     }
 
-    public void registerUserAccount(UserAccountRegistrationRequest userAccountRegistrationRequest) {
+    public UserAccount registerUserAccount(UserAccountRegistrationRequest userAccountRegistrationRequest) {
         log.info("Register new user account: {}", userAccountRegistrationRequest);
         String requestedEmail = userAccountRegistrationRequest.getEmail();
         boolean requestedConflictEmail = userAccountRepository.existsByEmail(requestedEmail);
@@ -44,7 +44,7 @@ public class UserAccountService {
                 .dateTimeCreated(requestDateTime)
                 .dateTimeUpdated(requestDateTime)
                 .build();
-        userAccountRepository.saveAndFlush(userAccount);
+        return userAccountRepository.saveAndFlush(userAccount);
     }
 
     public UserAccount updateUserAccountById(Long userAccountId, String newName, String newEmail) {
@@ -61,8 +61,7 @@ public class UserAccountService {
             }
             userAccount.setEmail(newEmail);
         }
-        userAccountRepository.saveAndFlush(userAccount);
-        return userAccount;
+        return userAccountRepository.saveAndFlush(userAccount);
     }
 
     public void deleteUserAccountById(Long userAccountId) {

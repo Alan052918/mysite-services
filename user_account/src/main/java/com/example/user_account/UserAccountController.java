@@ -2,6 +2,9 @@ package com.example.user_account;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,28 +15,34 @@ import java.util.List;
 public class UserAccountController {
 
     private final UserAccountService userAccountService;
+    private final UserAccountModelAssembler userAccountModelAssembler;
 
     @Autowired
-    public UserAccountController(UserAccountService userAccountService) {
+    public UserAccountController(UserAccountService userAccountService, UserAccountModelAssembler userAccountModelAssembler) {
         this.userAccountService = userAccountService;
+        this.userAccountModelAssembler = userAccountModelAssembler;
     }
 
     @GetMapping
-    public List<UserAccount> getAllUserAccounts() {
+    public CollectionModel<EntityModel<UserAccount>> getAllUserAccounts() {
         log.info("Request to get all user accounts");
-        return userAccountService.getAllUserAccounts();
+        List<UserAccount> userAccounts = userAccountService.getAllUserAccounts();
+        return userAccountModelAssembler.toCollectionModel(userAccounts);
     }
 
     @GetMapping(path = "{userAccountId}")
-    public UserAccount getUserAccountById(@PathVariable(name = "userAccountId") Long userAccountId) {
+    public EntityModel<UserAccount> getUserAccountById(@PathVariable(name = "userAccountId") Long userAccountId) {
         log.info("Request to get user account by id: {}", userAccountId);
-        return userAccountService.getUserAccountById(userAccountId);
+        UserAccount userAccount = userAccountService.getUserAccountById(userAccountId);
+        return userAccountModelAssembler.toModel(userAccount);
     }
 
     @PostMapping(path = "registration")
-    public void registerUserAccount(@RequestBody UserAccountRegistrationRequest userAccountRegistrationRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public EntityModel<UserAccount> registerUserAccount(@RequestBody UserAccountRegistrationRequest userAccountRegistrationRequest) {
         log.info("Request to register new user account: {}", userAccountRegistrationRequest);
-        userAccountService.registerUserAccount(userAccountRegistrationRequest);
+        UserAccount userAccount = userAccountService.registerUserAccount(userAccountRegistrationRequest);
+        return userAccountModelAssembler.toModel(userAccount);
     }
 
     @PostMapping(path = "{userAccountId}")
