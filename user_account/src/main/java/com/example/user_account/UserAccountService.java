@@ -34,7 +34,8 @@ public class UserAccountService {
     public void registerUserAccount(UserAccountRegistrationRequest userAccountRegistrationRequest) {
         log.info("Register new user account: {}", userAccountRegistrationRequest);
         String requestedEmail = userAccountRegistrationRequest.getEmail();
-        if (userAccountRepository.existsByEmail(requestedEmail)) {
+        boolean requestedConflictEmail = userAccountRepository.existsByEmail(requestedEmail);
+        if (requestedConflictEmail) {
             throw new UserAccountEmailConflictException(requestedEmail);
         }
         LocalDateTime requestDateTime = LocalDateTime.now();
@@ -56,7 +57,8 @@ public class UserAccountService {
             userAccount.setName(newName);
         }
         if (newEmail != null && newEmail.length() > 0 && !Objects.equals(newEmail, userAccount.getEmail())) {
-            if (userAccountRepository.existsByEmail(newEmail)) {
+            boolean requestedConflictEmail = userAccountRepository.existsByEmail(newEmail);
+            if (requestedConflictEmail) {
                 throw new UserAccountEmailConflictException(newEmail);
             }
             userAccount.setEmail(newEmail);
