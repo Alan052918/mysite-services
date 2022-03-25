@@ -1,7 +1,8 @@
 package com.example.blogpost.controller;
 
 import com.example.blogpost.entity.BlogPost;
-import com.example.blogpost.model_assembler.BlogPostModelAssembler;
+import com.example.blogpost.entity.BlogPostDetail;
+import com.example.blogpost.modelassembler.BlogPostModelAssembler;
 import com.example.blogpost.request.BlogPostCreationRequest;
 import com.example.blogpost.service.BlogPostService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,31 +38,35 @@ public class BlogPostController {
 
     @GetMapping(path = "{blogPostId}")
     public EntityModel<BlogPost> getBlogPostById(@PathVariable(name = "blogPostId") Long blogPostId) {
+//        TODO: change to returning blogPostDetail entity model
         log.info("Request to get blog post by id: {}", blogPostId);
-        BlogPost blogPost = blogPostService.getBlogPostById(blogPostId);
-        return blogPostModelAssembler.toModel(blogPost);
+        BlogPost blogPostById = blogPostService.getBlogPostById(blogPostId);
+        return blogPostModelAssembler.toModel(blogPostById);
     }
 
-    @PostMapping(path = "draft")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EntityModel<BlogPost> createBlogPost(@RequestBody BlogPostCreationRequest blogPostCreationRequest) {
         log.info("Request to create new blog post: {}", blogPostCreationRequest);
-        BlogPost blogPost = blogPostService.createBlogPost(blogPostCreationRequest);
-        return blogPostModelAssembler.toModel(blogPost);
+        BlogPost createdBlogPost = blogPostService.createBlogPost(blogPostCreationRequest);
+        return blogPostModelAssembler.toModel(createdBlogPost);
     }
 
     @PostMapping(path = "{blogPostId}")
-    public EntityModel<BlogPost> updateBlogPost(@PathVariable(name = "blogPostId") Long blogPostId,
-                                                @RequestParam(name = "title", required = false) String newTitle,
-                                                @RequestParam(name = "content", required = false) String newContent) {
-        // TODO: implement this
-        return null;
+    public EntityModel<BlogPost> updateBlogPostById(@PathVariable(name = "blogPostId") Long blogPostId,
+                                                    @RequestParam(name = "title", required = false) String newTitle,
+                                                    @RequestParam(name = "content", required = false) String newContent) {
+        log.info("Request to update blog post by id: {}", blogPostId);
+        BlogPost updatedBlogPost = blogPostService.updateBlogPostById(blogPostId, newTitle, newContent);
+        return blogPostModelAssembler.toModel(updatedBlogPost);
     }
 
     @DeleteMapping(path = "{blogPostId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBlogPost(@PathVariable(name = "blogPostId") Long blogPostId) {
-        // TODO: implement this
+    public ResponseEntity<?> deleteBlogPostById(@PathVariable(name = "blogPostId") Long blogPostId) {
+        log.info("Request to delete blog post by id: {}", blogPostId);
+        blogPostService.deleteBlogPostById(blogPostId);
+        return ResponseEntity.noContent().build();
     }
 
 }

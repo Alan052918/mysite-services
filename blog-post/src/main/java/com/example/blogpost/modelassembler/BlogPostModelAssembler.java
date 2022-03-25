@@ -1,4 +1,4 @@
-package com.example.blogpost.model_assembler;
+package com.example.blogpost.modelassembler;
 
 import com.example.blogpost.controller.BlogPostController;
 import com.example.blogpost.entity.BlogPost;
@@ -7,6 +7,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

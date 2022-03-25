@@ -25,18 +25,6 @@ public class BlogPost {
     private LocalDateTime dateTimeCreated;
     private LocalDateTime dateTimeUpdated;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "blog_post_detail_id", referencedColumnName = "id")
-    private BlogPostDetail blogPostDetail;
-
-    public BlogPostDetail getBlogPostDetail() {
-        return blogPostDetail;
-    }
-
-    public void setBlogPostDetail(BlogPostDetail blogPostDetail) {
-        this.blogPostDetail = blogPostDetail;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

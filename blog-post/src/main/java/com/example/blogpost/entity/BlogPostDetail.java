@@ -27,16 +27,9 @@ public class BlogPostDetail {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @OneToOne(mappedBy = "blogPostDetail")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "blog_post_id", referencedColumnName = "id")
     private BlogPost blogPost;
-
-    public BlogPost getBlogPost() {
-        return blogPost;
-    }
-
-    public void setBlogPost(BlogPost blogPost) {
-        this.blogPost = blogPost;
-    }
 
     @Override
     public boolean equals(Object o) {
