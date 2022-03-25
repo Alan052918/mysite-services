@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class UserAccountService {
                 .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
     }
 
+    @Transactional
     public UserAccount createUserAccount(UserAccountCreationRequest userAccountCreationRequest) {
         log.info("Create new user account: {}", userAccountCreationRequest);
         String requestedEmail = userAccountCreationRequest.getEmail();
@@ -47,6 +49,7 @@ public class UserAccountService {
         return userAccountRepository.saveAndFlush(userAccount);
     }
 
+    @Transactional
     public UserAccount updateUserAccountById(Long userAccountId, String newName, String newEmail) {
         log.info("Update user account by id: {}, new name: {}, new email: {}", userAccountId, newName, newEmail);
         UserAccount userAccount = userAccountRepository.findById(userAccountId)
@@ -64,6 +67,7 @@ public class UserAccountService {
         return userAccountRepository.saveAndFlush(userAccount);
     }
 
+    @Transactional
     public void deleteUserAccountById(Long userAccountId) {
         log.info("Delete user account by id: {}", userAccountId);
         if (!userAccountRepository.existsById(userAccountId)) {
