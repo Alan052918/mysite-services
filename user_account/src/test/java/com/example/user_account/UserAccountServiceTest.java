@@ -62,13 +62,13 @@ class UserAccountServiceTest {
     @Test
     void RegisterUserAccount_NewEmail_Success() {
         // given
-        UserAccountRegistrationRequest testRequest = UserAccountRegistrationRequest.builder()
+        UserAccountCreationRequest testRequest = UserAccountCreationRequest.builder()
                 .name("Alex")
                 .email("alex@gmail.com")
                 .build();
 
         // when
-        testService.registerUserAccount(testRequest);
+        testService.createUserAccount(testRequest);
 
         // then
         ArgumentCaptor<UserAccount> userAccountArgumentCaptor = ArgumentCaptor.forClass(UserAccount.class);
@@ -89,7 +89,7 @@ class UserAccountServiceTest {
                 .dateTimeUpdated(setupTime)
                 .build();
         mockUserAccountRepository.saveAndFlush(setupAccount);
-        UserAccountRegistrationRequest testRequest = UserAccountRegistrationRequest.builder()
+        UserAccountCreationRequest testRequest = UserAccountCreationRequest.builder()
                 .name("James")
                 .email("jamila@gmail.com")
                 .build();
@@ -98,7 +98,7 @@ class UserAccountServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> testService.registerUserAccount(testRequest))
+        assertThatThrownBy(() -> testService.createUserAccount(testRequest))
                 .isInstanceOf(UserAccountEmailConflictException.class)
                 .hasMessageContaining("Requested email " + testRequest.getEmail() + " conflicts with existing user accounts.");
         verify(mockUserAccountRepository, times(1)).saveAndFlush(any());
@@ -118,7 +118,7 @@ class UserAccountServiceTest {
         // when
         // then
         assertThatThrownBy(() -> testService.updateUserAccountById(testId, null, null))
-                .isInstanceOf(UserAccountNotExistException.class)
+                .isInstanceOf(UserAccountNotFoundException.class)
                 .hasMessageContaining("User account by id " + testId + " does not exist.");
         verify(mockUserAccountRepository, never()).saveAndFlush(any());
     }

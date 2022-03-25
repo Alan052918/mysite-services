@@ -14,15 +14,16 @@ public class UserAccountModelAssembler implements RepresentationModelAssembler<U
 
     @Override
     @NonNull
-    public EntityModel<UserAccount> toModel(@NonNull UserAccount userAccountEntity) {
-        return EntityModel.of(userAccountEntity,
-                linkTo(methodOn(UserAccountController.class).getUserAccountById(userAccountEntity.getId())).withSelfRel(),
+    public EntityModel<UserAccount> toModel(@NonNull UserAccount userAccount) {
+        return EntityModel.of(userAccount,
+                linkTo(methodOn(UserAccountController.class).getUserAccountById(userAccount.getId())).withSelfRel(),
                 linkTo(methodOn(UserAccountController.class).getAllUserAccounts()).withRel("users"));
     }
 
     @Override
     @NonNull
-    public CollectionModel<EntityModel<UserAccount>> toCollectionModel(@NonNull Iterable<? extends UserAccount> entities) {
-        return RepresentationModelAssembler.super.toCollectionModel(entities);
+    public CollectionModel<EntityModel<UserAccount>> toCollectionModel(@NonNull Iterable<? extends UserAccount> userAccounts) {
+        return RepresentationModelAssembler.super.toCollectionModel(userAccounts);
     }
+
 }

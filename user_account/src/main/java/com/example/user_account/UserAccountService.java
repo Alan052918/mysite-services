@@ -27,20 +27,20 @@ public class UserAccountService {
     public UserAccount getUserAccountById(Long userAccountId) {
         log.info("Get user account by id: {}", userAccountId);
         return userAccountRepository.findById(userAccountId)
-                .orElseThrow(() -> new UserAccountNotExistException(userAccountId));
+                .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
     }
 
-    public UserAccount registerUserAccount(UserAccountRegistrationRequest userAccountRegistrationRequest) {
-        log.info("Register new user account: {}", userAccountRegistrationRequest);
-        String requestedEmail = userAccountRegistrationRequest.getEmail();
+    public UserAccount createUserAccount(UserAccountCreationRequest userAccountCreationRequest) {
+        log.info("Create new user account: {}", userAccountCreationRequest);
+        String requestedEmail = userAccountCreationRequest.getEmail();
         boolean requestedConflictEmail = userAccountRepository.existsByEmail(requestedEmail);
         if (requestedConflictEmail) {
             throw new UserAccountEmailConflictException(requestedEmail);
         }
         LocalDateTime requestDateTime = LocalDateTime.now();
         UserAccount userAccount = UserAccount.builder()
-                .name(userAccountRegistrationRequest.getName())
-                .email(userAccountRegistrationRequest.getEmail())
+                .name(userAccountCreationRequest.getName())
+                .email(userAccountCreationRequest.getEmail())
                 .dateTimeCreated(requestDateTime)
                 .dateTimeUpdated(requestDateTime)
                 .build();
@@ -50,7 +50,7 @@ public class UserAccountService {
     public UserAccount updateUserAccountById(Long userAccountId, String newName, String newEmail) {
         log.info("Update user account by id: {}, new name: {}, new email: {}", userAccountId, newName, newEmail);
         UserAccount userAccount = userAccountRepository.findById(userAccountId)
-                .orElseThrow(() -> new UserAccountNotExistException(userAccountId));
+                .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
         if (newName != null && newName.length() > 0 && !Objects.equals(newName, userAccount.getName())) {
             userAccount.setName(newName);
         }
@@ -67,7 +67,7 @@ public class UserAccountService {
     public void deleteUserAccountById(Long userAccountId) {
         log.info("Delete user account by id: {}", userAccountId);
         if (!userAccountRepository.existsById(userAccountId)) {
-            throw new UserAccountNotExistException(userAccountId);
+            throw new UserAccountNotFoundException(userAccountId);
         }
         userAccountRepository.deleteById(userAccountId);
     }

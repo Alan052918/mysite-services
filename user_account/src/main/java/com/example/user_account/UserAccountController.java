@@ -26,23 +26,23 @@ public class UserAccountController {
     @GetMapping
     public CollectionModel<EntityModel<UserAccount>> getAllUserAccounts() {
         log.info("Request to get all user accounts");
-        List<UserAccount> userAccounts = userAccountService.getAllUserAccounts();
-        return userAccountModelAssembler.toCollectionModel(userAccounts);
+        List<UserAccount> allUserAccounts = userAccountService.getAllUserAccounts();
+        return userAccountModelAssembler.toCollectionModel(allUserAccounts);
     }
 
     @GetMapping(path = "{userAccountId}")
     public EntityModel<UserAccount> getUserAccountById(@PathVariable(name = "userAccountId") Long userAccountId) {
         log.info("Request to get user account by id: {}", userAccountId);
-        UserAccount userAccount = userAccountService.getUserAccountById(userAccountId);
-        return userAccountModelAssembler.toModel(userAccount);
+        UserAccount userAccountById = userAccountService.getUserAccountById(userAccountId);
+        return userAccountModelAssembler.toModel(userAccountById);
     }
 
     @PostMapping(path = "registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public EntityModel<UserAccount> registerUserAccount(@RequestBody UserAccountRegistrationRequest userAccountRegistrationRequest) {
-        log.info("Request to register new user account: {}", userAccountRegistrationRequest);
-        UserAccount userAccount = userAccountService.registerUserAccount(userAccountRegistrationRequest);
-        return userAccountModelAssembler.toModel(userAccount);
+    public EntityModel<UserAccount> createUserAccount(@RequestBody UserAccountCreationRequest userAccountCreationRequest) {
+        log.info("Request to create new user account: {}", userAccountCreationRequest);
+        UserAccount createdUserAccount = userAccountService.createUserAccount(userAccountCreationRequest);
+        return userAccountModelAssembler.toModel(createdUserAccount);
     }
 
     @PostMapping(path = "{userAccountId}")
