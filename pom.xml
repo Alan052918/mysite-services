@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>user_account</module>
+        <module>blog_post</module>
     </modules>
 
     <properties>
