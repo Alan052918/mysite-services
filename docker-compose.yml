@@ -13,22 +13,6 @@ services:
       - user-account-postgres:/data/postgres
     ports:
       - "5432:5432"
-#    networks:
-#      - postgres
-#
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    restart: unless-stopped
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-#      PGADMIN_CONFIG_SERVER_MODE: "False"
-#    volumes:
-#      - pgadmin:/var/lib/pgadmin
-#    ports:
-#      - "5050:80"
-#    networks:
-#      - postgres
 
   blog-post-mysql:
     image: mysql:oracle
@@ -43,11 +27,6 @@ services:
     ports:
       - "3306:3306"
 
-#networks:
-#  postgres:
-#    driver: bridge
-
 volumes:
   user-account-postgres:
-#  pgadmin:
   blog-post-mysql:
