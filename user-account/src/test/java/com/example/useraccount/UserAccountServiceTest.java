@@ -119,7 +119,7 @@ class UserAccountServiceTest {
         // then
         assertThatThrownBy(() -> testService.updateUserAccountById(testId, null, null))
                 .isInstanceOf(UserAccountNotFoundException.class)
-                .hasMessageContaining("User account by id " + testId + " does not exist.");
+                .hasMessageContaining("User account by id " + testId + " was not found.");
         verify(mockUserAccountRepository, never()).saveAndFlush(any());
     }
 
