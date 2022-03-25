@@ -31,14 +31,6 @@ public class UserAccount {
         this.dateTimeUpdated = dateTimeUpdated;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -69,34 +61,6 @@ public class UserAccount {
 
     public void setDateTimeUpdated(LocalDateTime dateTimeUpdated) {
         this.dateTimeUpdated = dateTimeUpdated;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserAccount that = (UserAccount) o;
-        return id.equals(that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(dateTimeCreated, that.dateTimeCreated) &&
-                Objects.equals(dateTimeUpdated, that.dateTimeUpdated);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, email, dateTimeCreated, dateTimeUpdated);
-    }
-
-    @Override
-    public String toString() {
-        return "UserAccount{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", dateTimeCreated=" + dateTimeCreated +
-                ", dateTimeUpdated=" + dateTimeUpdated +
-                '}';
     }
 
 }
