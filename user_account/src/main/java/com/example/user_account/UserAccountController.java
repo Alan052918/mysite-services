@@ -37,7 +37,7 @@ public class UserAccountController {
         return userAccountModelAssembler.toModel(userAccountById);
     }
 
-    @PostMapping(path = "registration")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EntityModel<UserAccount> createUserAccount(@RequestBody UserAccountCreationRequest userAccountCreationRequest) {
         log.info("Request to create new user account: {}", userAccountCreationRequest);
@@ -54,6 +54,7 @@ public class UserAccountController {
     }
 
     @DeleteMapping(path = "{userAccountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserAccountById(@PathVariable(name = "userAccountId") Long userAccountId) {
         log.info("Request to delete user account by id: {}", userAccountId);
         userAccountService.deleteUserAccountById(userAccountId);
