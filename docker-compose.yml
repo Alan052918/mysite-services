@@ -1,36 +1,53 @@
+version: "2"
+
 services:
-  postgres:
+  user-account-postgres:
     image: postgres
-    volumes:
-      - postgres:/data/postgres
+    restart: unless-stopped
     environment:
+      - POSTGRES_DB=user_account
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - user-account-postgres:/data/postgres
     ports:
       - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
+#    networks:
+#      - postgres
+#
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    restart: unless-stopped
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+#      PGADMIN_CONFIG_SERVER_MODE: "False"
+#    volumes:
+#      - pgadmin:/var/lib/pgadmin
+#    ports:
+#      - "5050:80"
+#    networks:
+#      - postgres
 
-  pgadmin:
-    image: dpage/pgadmin4
-    volumes:
-      - pgadmin:/var/lib/pgadmin
+  blog-post-mysql:
+    image: mysql:oracle
+    restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      - MYSQL_DATABASE=blog_post
+      - MYSQL_ROOT_PASSWORD=mysql
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+    volumes:
+      - blog-post-mysql:/var/lib/mysql
     ports:
-      - "5050:80"
-    networks:
-      - postgres
-    restart: unless-stopped
+      - "3306:3306"
 
-networks:
-  postgres:
-    driver: bridge
+#networks:
+#  postgres:
+#    driver: bridge
 
 volumes:
-  postgres:
-  pgadmin:
+  user-account-postgres:
+#  pgadmin:
+  blog-post-mysql:
