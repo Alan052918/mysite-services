@@ -46,7 +46,7 @@ public class UserAccountService {
                 .dateTimeCreated(requestDateTime)
                 .dateTimeUpdated(requestDateTime)
                 .build();
-        return userAccountRepository.saveAndFlush(userAccount);
+        return userAccountRepository.save(userAccount);
     }
 
     @Transactional
@@ -64,13 +64,14 @@ public class UserAccountService {
             }
             userAccount.setEmail(newEmail);
         }
-        return userAccountRepository.saveAndFlush(userAccount);
+        return userAccountRepository.save(userAccount);
     }
 
     @Transactional
     public void deleteUserAccountById(Long userAccountId) {
         log.info("Delete user account by id: {}", userAccountId);
-        if (!userAccountRepository.existsById(userAccountId)) {
+        boolean existsById = userAccountRepository.existsById(userAccountId);
+        if (!existsById) {
             throw new UserAccountNotFoundException(userAccountId);
         }
         userAccountRepository.deleteById(userAccountId);

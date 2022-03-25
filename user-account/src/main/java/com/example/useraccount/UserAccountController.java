@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,9 +56,10 @@ public class UserAccountController {
 
     @DeleteMapping(path = "{userAccountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserAccountById(@PathVariable(name = "userAccountId") Long userAccountId) {
+    public ResponseEntity<?> deleteUserAccountById(@PathVariable(name = "userAccountId") Long userAccountId) {
         log.info("Request to delete user account by id: {}", userAccountId);
         userAccountService.deleteUserAccountById(userAccountId);
+        return ResponseEntity.noContent().build();
     }
 
 }
