@@ -1,6 +1,8 @@
 package com.example.blogpost.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -16,12 +18,12 @@ import java.util.Objects;
 public class BlogPostDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blog_post_detail_id_generator")
-    @SequenceGenerator(name = "blog_post_detail_id_generator", sequenceName = "blog_post_detail_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blog_post_detail_id_sequence")
+    @SequenceGenerator(name = "blog_post_detail_id_sequence", sequenceName = "blog_post_detail_id_sequence")
     private Long id;
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blog_post_detail_sequence_generator")
-    @SequenceGenerator(name = "blog_post_detail_sequence_generator", sequenceName = "blog_post_detail_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blog_post_detail_sequence")
+    @SequenceGenerator(name = "blog_post_detail_sequence", sequenceName = "blog_post_detail_sequence")
     private Long sequence;
 
     @Column(columnDefinition = "TEXT")
@@ -29,6 +31,7 @@ public class BlogPostDetail {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "blog_post_id", referencedColumnName = "id")
+    @JsonBackReference
     private BlogPost blogPost;
 
     @Override

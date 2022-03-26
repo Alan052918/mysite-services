@@ -1,5 +1,6 @@
 package com.example.blogpost.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -24,6 +25,11 @@ public class BlogPost {
     private String title;
     private LocalDateTime dateTimeCreated;
     private LocalDateTime dateTimeUpdated;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false, mappedBy = "blogPost")
+    @JsonManagedReference
+    @ToString.Exclude
+    private BlogPostDetail blogPostDetail;
 
     @Override
     public boolean equals(Object o) {

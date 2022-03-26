@@ -36,8 +36,6 @@ public class BlogPostService {
 
     public BlogPost getBlogPostById(Long blogPostId) {
         log.info("Get blog post by id: {}", blogPostId);
-        //        BlogPost blogPostDetail = blogPostDetailRepository.findByBlogPost(blogPost)
-//                .orElseThrow(() -> new BlogPostDetailNotFoundException(blogPost));
         return blogPostRepository.findById(blogPostId)
                 .orElseThrow(() -> new BlogPostNotFoundException(blogPostId));
     }
@@ -52,9 +50,10 @@ public class BlogPostService {
                 .dateTimeUpdated(requestDateTime)
                 .build();
         BlogPostDetail blogPostDetail = BlogPostDetail.builder()
-                .blogPost(blogPost)
                 .content(blogPostCreationRequest.getContent())
                 .build();
+        blogPost.setBlogPostDetail(blogPostDetail);
+        blogPostDetail.setBlogPost(blogPost);
         blogPostDetailRepository.save(blogPostDetail);
         return blogPostRepository.save(blogPost);
     }
@@ -64,7 +63,6 @@ public class BlogPostService {
         log.info("Update blog post by id: {}, new title: {}, new content: {}", blogPostId, newTitle, newContent);
         BlogPost blogPost = blogPostRepository.findById(blogPostId)
                 .orElseThrow(() -> new BlogPostNotFoundException(blogPostId));
-//        BlogPostDetail blogPostDetail = blogPost.getBlogPostDetail();
         BlogPostDetail blogPostDetail = blogPostDetailRepository.findByBlogPost(blogPost)
                 .orElseThrow(() -> new BlogPostDetailNotFoundException(blogPost));
         if (newTitle != null && newTitle.length() > 0 && !Objects.equals(newTitle, blogPost.getTitle())) {
@@ -82,7 +80,6 @@ public class BlogPostService {
         log.info("Delete blog post by id: {}", blogPostId);
         BlogPost blogPost = blogPostRepository.findById(blogPostId)
                 .orElseThrow(() -> new BlogPostNotFoundException(blogPostId));
-//        BlogPostDetail blogPostDetail = blogPost.getBlogPostDetail();
         BlogPostDetail blogPostDetail = blogPostDetailRepository.findByBlogPost(blogPost)
                 .orElseThrow(() -> new BlogPostDetailNotFoundException(blogPost));
         blogPostRepository.delete(blogPost);

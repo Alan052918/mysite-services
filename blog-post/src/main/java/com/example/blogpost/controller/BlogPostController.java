@@ -1,7 +1,6 @@
 package com.example.blogpost.controller;
 
 import com.example.blogpost.entity.BlogPost;
-import com.example.blogpost.entity.BlogPostDetail;
 import com.example.blogpost.modelassembler.BlogPostModelAssembler;
 import com.example.blogpost.request.BlogPostCreationRequest;
 import com.example.blogpost.service.BlogPostService;
