@@ -60,7 +60,7 @@ class UserAccountServiceTest {
     }
 
     @Test
-    void RegisterUserAccount_NewEmail_Success() {
+    void CreateUserAccount_NewEmail_Success() {
         // given
         UserAccountCreationRequest testRequest = UserAccountCreationRequest.builder()
                 .name("Alex")
@@ -72,14 +72,14 @@ class UserAccountServiceTest {
 
         // then
         ArgumentCaptor<UserAccount> userAccountArgumentCaptor = ArgumentCaptor.forClass(UserAccount.class);
-        verify(mockUserAccountRepository).saveAndFlush(userAccountArgumentCaptor.capture());
+        verify(mockUserAccountRepository).save(userAccountArgumentCaptor.capture());
         UserAccount userAccountArgumentCaptorValue = userAccountArgumentCaptor.getValue();
         assertThat(userAccountArgumentCaptorValue.getName()).isEqualTo(testRequest.getName());
         assertThat(userAccountArgumentCaptorValue.getEmail()).isEqualTo(testRequest.getEmail());
     }
 
     @Test
-    void RegisterUserAccount_ConflictEmail_ExceptionThrown() {
+    void CreateUserAccount_ConflictEmail_ExceptionThrown() {
         // given
         LocalDateTime setupTime = LocalDateTime.now();
         UserAccount setupAccount = UserAccount.builder()
@@ -88,7 +88,7 @@ class UserAccountServiceTest {
                 .dateTimeCreated(setupTime)
                 .dateTimeUpdated(setupTime)
                 .build();
-        mockUserAccountRepository.saveAndFlush(setupAccount);
+        mockUserAccountRepository.save(setupAccount);
         UserAccountCreationRequest testRequest = UserAccountCreationRequest.builder()
                 .name("James")
                 .email("jamila@gmail.com")
@@ -101,7 +101,7 @@ class UserAccountServiceTest {
         assertThatThrownBy(() -> testService.createUserAccount(testRequest))
                 .isInstanceOf(UserAccountEmailConflictException.class)
                 .hasMessageContaining("Requested email " + testRequest.getEmail() + " conflicts with existing user accounts.");
-        verify(mockUserAccountRepository, times(1)).saveAndFlush(any());
+        verify(mockUserAccountRepository, times(1)).save(any());
     }
 
     @Test
@@ -120,7 +120,7 @@ class UserAccountServiceTest {
         assertThatThrownBy(() -> testService.updateUserAccountById(testId, null, null))
                 .isInstanceOf(UserAccountNotFoundException.class)
                 .hasMessageContaining("User account by id " + testId + " was not found.");
-        verify(mockUserAccountRepository, never()).saveAndFlush(any());
+        verify(mockUserAccountRepository, never()).save(any());
     }
 
     @Test

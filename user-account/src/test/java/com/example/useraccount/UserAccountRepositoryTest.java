@@ -32,7 +32,7 @@ class UserAccountRepositoryTest {
                 .dateTimeCreated(testDateTime)
                 .dateTimeUpdated(testDateTime)
                 .build();
-        testRepository.saveAndFlush(testAccount);
+        testRepository.save(testAccount);
 
         // when
         boolean existsByEmail = testRepository.existsByEmail(testEmail);
@@ -42,7 +42,7 @@ class UserAccountRepositoryTest {
     }
 
     @Test
-    void ExistsByEmail_NonexistingEmail_False() {
+    void ExistsByEmail_NonExistingEmail_False() {
         // given
         String email = "jamila@gmail.com";
 
