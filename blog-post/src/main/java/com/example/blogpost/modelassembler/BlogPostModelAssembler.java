@@ -1,34 +1,30 @@
 package com.example.blogpost.modelassembler;
 
 import com.example.blogpost.controller.BlogPostController;
-import com.example.blogpost.entity.BlogPost;
+import com.example.blogpost.entity.Post;
 import lombok.NonNull;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class BlogPostModelAssembler implements RepresentationModelAssembler<BlogPost, EntityModel<BlogPost>> {
+public class BlogPostModelAssembler implements RepresentationModelAssembler<Post, EntityModel<Post>> {
 
     @Override
     @NonNull
-    public EntityModel<BlogPost> toModel(@NonNull BlogPost blogPost) {
-        return EntityModel.of(blogPost,
-                linkTo(methodOn(BlogPostController.class).getBlogPostById(blogPost.getId())).withSelfRel(),
-                linkTo(methodOn(BlogPostController.class).getAllBlogPosts()).withRel("posts"));
+    public EntityModel<Post> toModel(@NonNull Post post) {
+        return EntityModel.of(post,
+                linkTo(methodOn(BlogPostController.class).getPostById(post.getId())).withSelfRel(),
+                linkTo(methodOn(BlogPostController.class).getAllPosts()).withRel("posts"));
     }
 
     @Override
     @NonNull
-    public CollectionModel<EntityModel<BlogPost>> toCollectionModel(@NonNull Iterable<? extends BlogPost> blogPosts) {
+    public CollectionModel<EntityModel<Post>> toCollectionModel(@NonNull Iterable<? extends Post> blogPosts) {
         return RepresentationModelAssembler.super.toCollectionModel(blogPosts);
     }
 

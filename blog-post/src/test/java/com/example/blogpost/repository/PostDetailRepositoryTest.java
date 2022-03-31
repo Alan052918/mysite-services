@@ -1,8 +1,8 @@
 package com.example.blogpost.repository;
 
-import com.example.blogpost.entity.BlogPost;
-import com.example.blogpost.entity.BlogPostDetail;
-import com.example.blogpost.exception.BlogPostDetailNotFoundException;
+import com.example.blogpost.entity.Post;
+import com.example.blogpost.entity.PostDetail;
+import com.example.blogpost.exception.PostDetailNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +17,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
-class BlogPostDetailRepositoryTest {
+class PostDetailRepositoryTest {
 
     @Mock
-    private BlogPostRepository mockBlogPostRepository;
+    private PostRepository mockPostRepository;
 
     @Autowired
-    private BlogPostDetailRepository testRepository;
+    private PostDetailRepository testRepository;
 
     @AfterEach
     void tearDown() {
@@ -33,34 +33,34 @@ class BlogPostDetailRepositoryTest {
     @Test
     void FindByBlogPost_SavedBlogPost_NotNull() {
         // given
-        BlogPost testPost = BlogPost.builder().build();
-        BlogPostDetail testPostDetail = BlogPostDetail.builder()
-                .blogPost(testPost)
+        Post testPost = Post.builder().build();
+        PostDetail testPostDetail = PostDetail.builder()
+                .post(testPost)
                 .build();
-        testPost.setBlogPostDetail(testPostDetail);
+        testPost.setPostDetail(testPostDetail);
         testRepository.save(testPostDetail);
 
         // when
-        BlogPostDetail foundBlogPostDetail = testRepository.findByBlogPost(testPost).orElse(null);
+        PostDetail foundPostDetail = testRepository.findByPost(testPost).orElse(null);
 
         // then
-        assertThat(foundBlogPostDetail).isNotNull();
+        assertThat(foundPostDetail).isNotNull();
     }
 
     @Test
     void FindByBlogPost_UnsavedBlogPost_ExceptionThrown() {
         // given
-        BlogPost testPost = BlogPost.builder().build();
-        BlogPostDetail testPostDetail = BlogPostDetail.builder()
-                .blogPost(testPost)
+        Post testPost = Post.builder().build();
+        PostDetail testPostDetail = PostDetail.builder()
+                .post(testPost)
                 .build();
-        testPost.setBlogPostDetail(testPostDetail);
-        mockBlogPostRepository.save(testPost);
+        testPost.setPostDetail(testPostDetail);
+        mockPostRepository.save(testPost);
 
         // when
         // then
-        assertThatThrownBy(() -> testRepository.findByBlogPost(testPost)
-                .orElseThrow(() -> new BlogPostDetailNotFoundException(testPost)))
+        assertThatThrownBy(() -> testRepository.findByPost(testPost)
+                .orElseThrow(() -> new PostDetailNotFoundException(testPost)))
                 .isInstanceOf(InvalidDataAccessApiUsageException.class);
     }
 
