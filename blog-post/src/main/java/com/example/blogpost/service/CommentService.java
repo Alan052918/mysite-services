@@ -49,13 +49,18 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment createComment(CommentCreationRequest commentCreationRequest) {
+    public Comment createCommentForPostById(Long postId, CommentCreationRequest commentCreationRequest) {
         log.info("Create new comment: {}", commentCreationRequest);
         ZonedDateTime requestDateTime = ZonedDateTime.now();
 
-        Long requestedPostId = commentCreationRequest.getPostId();
-        Post requestedPost = postRepository.findById(requestedPostId)
-                .orElseThrow(() -> new PostNotFoundException(requestedPostId));
+        Post requestedPost = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException(postId));
+
+        Long replyToId = commentCreationRequest.getReplyToId();
+        Comment parentComment = replyToId == null ?
+                null :
+                commentRepository.findById(replyToId)
+                        .orElseThrow(() -> new CommentNotFoundException(replyToId));
 
         Comment comment = Comment.builder()
                 .content(commentCreationRequest.getContent())
@@ -64,18 +69,16 @@ public class CommentService {
                 .dateTimeCreated(requestDateTime)
                 .dateTimeLastModified(requestDateTime)
                 .post(requestedPost)
-                .replyToId(commentCreationRequest.getReplyToId())
-                .replyIds(new ArrayList<>())
+                .replyTo(parentComment)
+                .replies(new ArrayList<>())
                 .build();
         Comment savedComment = commentRepository.save(comment);
 
-        Long replyToId = commentCreationRequest.getReplyToId();
-        if (replyToId != null) {
-            Comment parentComment = commentRepository.findById(replyToId)
-                    .orElseThrow(() -> new CommentNotFoundException(replyToId));
-            List<Long> parentCommentReplyIds = parentComment.getReplyIds();
-            parentCommentReplyIds.add(savedComment.getId());
-            parentComment.setReplyIds(parentCommentReplyIds);
+        if (parentComment != null) {
+            log.info("Reply to: {}", parentComment);
+            List<Comment> parentCommentReplies = parentComment.getReplies();
+            parentCommentReplies.add(savedComment);
+            parentComment.setReplies(parentCommentReplies);
             commentRepository.save(parentComment);
         }
 
@@ -85,10 +88,12 @@ public class CommentService {
     @Transactional
     public Comment updateCommentById(Long commentId, String newContent) {
         log.info("Update comment by id: {}, new content: {}", commentId, newContent);
+        ZonedDateTime requestDateTime = ZonedDateTime.now();
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));
         if (newContent != null && newContent.length() > 0 && !Objects.equals(newContent, comment.getContent())) {
             comment.setContent(newContent);
+            comment.setDateTimeLastModified(requestDateTime);
         }
         return commentRepository.save(comment);
     }
@@ -96,11 +101,31 @@ public class CommentService {
     @Transactional
     public void deleteCommentById(Long commentId) {
         log.info("Delete comment by id: {}", commentId);
-        boolean existsById = commentRepository.existsById(commentId);
-        if (!existsById) {
-            throw new CommentNotFoundException(commentId);
+        Comment comment = commentRepository.findById(commentId)
+                        .orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        List<Comment> replies = comment.getReplies();
+        for (Comment reply : replies) {
+            deleteComment(reply);
         }
+
+        Comment parentComment = comment.getReplyTo();
+        if (parentComment != null) {
+            List<Comment> parentCommentReplies = parentComment.getReplies();
+            parentCommentReplies.remove(comment);
+            parentComment.setReplies(parentCommentReplies);
+        }
+
         commentRepository.deleteById(commentId);
+    }
+
+    private void deleteComment(Comment comment) {
+        log.info("Delete comment: {}", comment);
+        List<Comment> replies = comment.getReplies();
+        for (Comment reply : replies) {
+            deleteComment(reply);
+        }
+        commentRepository.delete(comment);
     }
 
 }

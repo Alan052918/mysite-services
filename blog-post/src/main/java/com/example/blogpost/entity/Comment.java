@@ -32,13 +32,15 @@ public class Comment {
     private ZonedDateTime dateTimeLastModified;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+//    @JsonIgnore
     private Post post;
 
-    private Long replyToId;
+    @ManyToOne(fetch = FetchType.EAGER)
+//    @JsonIgnore
+    private Comment replyTo;
 
-    @ElementCollection
+    @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Long> replyIds;
+    private List<Comment> replies;
 
 }

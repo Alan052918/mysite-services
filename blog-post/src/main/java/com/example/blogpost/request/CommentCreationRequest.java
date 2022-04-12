@@ -13,10 +13,9 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class CommentCreationRequest {
 
-    private Long postId;
-    private Long replyToId;
-    private Long userId;
-//    private ZonedDateTime dateTime;
     private String content;
+    private Long userId;
+    private Long replyToId;
+//    private ZonedDateTime dateTime;
 
 }

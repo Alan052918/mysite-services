@@ -49,22 +49,25 @@ public class CommentController {
         return commentModelAssembler.toModel(commentById);
     }
 
-    @PostMapping(path = "comments")
+    @PostMapping(path = "posts/{postId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public EntityModel<Comment> createComment(@RequestBody CommentCreationRequest commentCreationRequest) {
-        log.info("Request to create new comment: {}", commentCreationRequest);
-        Comment createdComment = commentService.createComment(commentCreationRequest);
+    public EntityModel<Comment> createComment(@PathVariable(name = "postId") Long postId,
+                                              @RequestBody CommentCreationRequest commentCreationRequest) {
+        log.info("Request to create new comment for post by id: {}, request: {}", postId, commentCreationRequest);
+        Comment createdComment = commentService.createCommentForPostById(postId, commentCreationRequest);
         return commentModelAssembler.toModel(createdComment);
     }
 
     @PostMapping(path = "comments/{commentId}")
     public EntityModel<Comment> updateCommentById(@PathVariable(name = "commentId") Long commentId,
-                                     @RequestParam(name = "content") String newContent) {
+                                                  @RequestParam(name = "content") String newContent) {
+        log.info("Request to update comment by id: {}, new content: {}", commentId, newContent);
         Comment updatedComment = commentService.updateCommentById(commentId, newContent);
         return commentModelAssembler.toModel(updatedComment);
     }
 
     @DeleteMapping(path = "comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> deleteCommentById(@PathVariable(name = "commentId") Long commentId) {
         log.info("Request to delete comment by id: {}", commentId);
         commentService.deleteCommentById(commentId);
