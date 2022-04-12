@@ -24,8 +24,8 @@ public class PostModelAssembler implements RepresentationModelAssembler<Post, En
 
     @Override
     @NonNull
-    public CollectionModel<EntityModel<Post>> toCollectionModel(@NonNull Iterable<? extends Post> blogPosts) {
-        return RepresentationModelAssembler.super.toCollectionModel(blogPosts);
+    public CollectionModel<EntityModel<Post>> toCollectionModel(@NonNull Iterable<? extends Post> posts) {
+        return RepresentationModelAssembler.super.toCollectionModel(posts);
     }
 
 }

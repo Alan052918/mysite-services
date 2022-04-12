@@ -30,6 +30,11 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
+    public List<Comment> getAllComments() {
+        log.info("Get all comments");
+        return commentRepository.findAll();
+    }
+
     public List<Comment> getAllCommentsByPostId(Long postId) {
         log.info("Get all comments by post id: {}", postId);
         Post requestedPost = postRepository.findById(postId)

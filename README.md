@@ -11,8 +11,8 @@ Available services
 
 ## user-account
 
-![user_account](user_account_erd.png)
+![user_account](./docs/images/user_account_erd.png)
 
 ## blog-post
 
-![blog_post](blog_post_erd.png)
+![blog_post](./docs/images/blog_post_erd.png)

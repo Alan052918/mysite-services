@@ -1,10 +1,13 @@
 package com.example.blogpost.controller;
 
 import com.example.blogpost.entity.Comment;
+import com.example.blogpost.modelassembler.CommentModelAssembler;
 import com.example.blogpost.request.CommentCreationRequest;
 import com.example.blogpost.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,35 +20,48 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentModelAssembler commentModelAssembler;
 
     @Autowired
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, CommentModelAssembler commentModelAssembler) {
         this.commentService = commentService;
+        this.commentModelAssembler = commentModelAssembler;
     }
 
     @GetMapping(path = "posts/{postId}/comments")
-    public List<Comment> getAllCommentsByPostId(@PathVariable(name = "postId") Long postId) {
+    public CollectionModel<EntityModel<Comment>> getAllCommentsByPostId(@PathVariable(name = "postId") Long postId) {
         log.info("Request to get all comments by post id: {}", postId);
-        return commentService.getAllCommentsByPostId(postId);
+        List<Comment> commentsByPostId = commentService.getAllCommentsByPostId(postId);
+        return commentModelAssembler.toCollectionModel(commentsByPostId);
+    }
+
+    @GetMapping(path = "comments")
+    public CollectionModel<EntityModel<Comment>> getAllComments() {
+        log.info("Request to get all comments");
+        List<Comment> comments = commentService.getAllComments();
+        return commentModelAssembler.toCollectionModel(comments);
     }
 
     @GetMapping(path = "comments/{commentId}")
-    public Comment getCommentById(@PathVariable(name = "commentId") Long commentId) {
+    public EntityModel<Comment> getCommentById(@PathVariable(name = "commentId") Long commentId) {
         log.info("Request to get comment by id: {}", commentId);
-        return commentService.getCommentById(commentId);
+        Comment commentById = commentService.getCommentById(commentId);
+        return commentModelAssembler.toModel(commentById);
     }
 
     @PostMapping(path = "comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public Comment createComment(@RequestBody CommentCreationRequest commentCreationRequest) {
+    public EntityModel<Comment> createComment(@RequestBody CommentCreationRequest commentCreationRequest) {
         log.info("Request to create new comment: {}", commentCreationRequest);
-        return commentService.createComment(commentCreationRequest);
+        Comment createdComment = commentService.createComment(commentCreationRequest);
+        return commentModelAssembler.toModel(createdComment);
     }
 
     @PostMapping(path = "comments/{commentId}")
-    public Comment updateCommentById(@PathVariable(name = "commentId") Long commentId,
+    public EntityModel<Comment> updateCommentById(@PathVariable(name = "commentId") Long commentId,
                                      @RequestParam(name = "content") String newContent) {
-        return commentService.updateCommentById(commentId, newContent);
+        Comment updatedComment = commentService.updateCommentById(commentId, newContent);
+        return commentModelAssembler.toModel(updatedComment);
     }
 
     @DeleteMapping(path = "comments/{commentId}")
