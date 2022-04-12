@@ -65,7 +65,6 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .content(commentCreationRequest.getContent())
                 .userIdCreated(commentCreationRequest.getUserId())
-                .userIdLastModified(commentCreationRequest.getUserId())
                 .dateTimeCreated(requestDateTime)
                 .dateTimeLastModified(requestDateTime)
                 .post(requestedPost)

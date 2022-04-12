@@ -26,7 +26,6 @@ public class Comment {
     private String content;
 
     private Long userIdCreated;
-    private Long userIdLastModified;
 
     private ZonedDateTime dateTimeCreated;
     private ZonedDateTime dateTimeLastModified;
