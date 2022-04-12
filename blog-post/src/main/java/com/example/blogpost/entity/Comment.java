@@ -1,6 +1,7 @@
 package com.example.blogpost.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,15 +31,18 @@ public class Comment {
     private ZonedDateTime dateTimeCreated;
     private ZonedDateTime dateTimeLastModified;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
 //    @JsonIgnore
     private Post post;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reply_to_id", referencedColumnName = "id")
+    @JsonIgnoreProperties(value = {"post"})
 //    @JsonIgnore
     private Comment replyTo;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "replyTo")
     @JsonIgnore
     private List<Comment> replies;
 

@@ -37,16 +37,19 @@ public class Post {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private PostDetail postDetail;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Comment> comments;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Tag> tags;
 
 }

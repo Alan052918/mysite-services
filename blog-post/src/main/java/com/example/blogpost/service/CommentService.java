@@ -2,6 +2,7 @@ package com.example.blogpost.service;
 
 import com.example.blogpost.entity.Comment;
 import com.example.blogpost.entity.Post;
+import com.example.blogpost.exception.BadReplyException;
 import com.example.blogpost.exception.CommentNotFoundException;
 import com.example.blogpost.exception.PostNotFoundException;
 import com.example.blogpost.repository.CommentRepository;
@@ -50,7 +51,7 @@ public class CommentService {
 
     @Transactional
     public Comment createCommentForPostById(Long postId, CommentCreationRequest commentCreationRequest) {
-        log.info("Create new comment: {}", commentCreationRequest);
+        log.info("Create new comment for post by id: {}, request: {}", postId, commentCreationRequest);
         ZonedDateTime requestDateTime = ZonedDateTime.now();
 
         Post requestedPost = postRepository.findById(postId)
@@ -61,6 +62,9 @@ public class CommentService {
                 null :
                 commentRepository.findById(replyToId)
                         .orElseThrow(() -> new CommentNotFoundException(replyToId));
+        if (parentComment != null && !Objects.equals(parentComment.getPost(), requestedPost)) {
+            throw new BadReplyException(parentComment.getPost(), requestedPost);
+        }
 
         Comment comment = Comment.builder()
                 .content(commentCreationRequest.getContent())
