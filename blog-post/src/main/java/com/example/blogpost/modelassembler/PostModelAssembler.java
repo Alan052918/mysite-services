@@ -1,6 +1,6 @@
 package com.example.blogpost.modelassembler;
 
-import com.example.blogpost.controller.BlogPostController;
+import com.example.blogpost.controller.PostController;
 import com.example.blogpost.entity.Post;
 import lombok.NonNull;
 import org.springframework.hateoas.CollectionModel;
@@ -12,14 +12,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class BlogPostModelAssembler implements RepresentationModelAssembler<Post, EntityModel<Post>> {
+public class PostModelAssembler implements RepresentationModelAssembler<Post, EntityModel<Post>> {
 
     @Override
     @NonNull
     public EntityModel<Post> toModel(@NonNull Post post) {
         return EntityModel.of(post,
-                linkTo(methodOn(BlogPostController.class).getPostById(post.getId())).withSelfRel(),
-                linkTo(methodOn(BlogPostController.class).getAllPosts()).withRel("posts"));
+                linkTo(methodOn(PostController.class).getPostById(post.getId())).withSelfRel(),
+                linkTo(methodOn(PostController.class).getAllPosts()).withRel("posts"));
     }
 
     @Override

@@ -26,7 +26,6 @@ public class Tag {
     private String label;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id")
     @JsonIgnoreProperties("tags")
     private List<Post> posts;
 

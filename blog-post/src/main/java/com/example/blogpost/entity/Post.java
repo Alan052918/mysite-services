@@ -2,12 +2,10 @@ package com.example.blogpost.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "post")
@@ -29,8 +27,8 @@ public class Post {
     private Long userIdCreated;
     private Long userIdLastModified;
 
-    private LocalDateTime dateTimeCreated;
-    private LocalDateTime dateTimeLastModified;
+    private ZonedDateTime dateTimeCreated;
+    private ZonedDateTime dateTimeLastModified;
 
     private Long commentCount;
     private Long likeCount;

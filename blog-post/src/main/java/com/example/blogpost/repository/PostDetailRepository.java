@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PostDetailRepository extends JpaRepository<PostDetail, Long> {
 
-    @Query("select bpd from PostDetail bpd where bpd.post = ?1")
+    @Query(value = "select bpd from PostDetail bpd where bpd.post = ?1")
     Optional<PostDetail> findByPost(Post post);
 
 }

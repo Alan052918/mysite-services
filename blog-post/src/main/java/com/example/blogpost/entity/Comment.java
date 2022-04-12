@@ -1,15 +1,11 @@
 package com.example.blogpost.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.apache.tomcat.jni.Local;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "comment")
@@ -32,8 +28,8 @@ public class Comment {
     private Long userIdCreated;
     private Long userIdLastModified;
 
-    private LocalDateTime dateTimeCreated;
-    private LocalDateTime dateTimeLastModified;
+    private ZonedDateTime dateTimeCreated;
+    private ZonedDateTime dateTimeLastModified;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -42,6 +38,7 @@ public class Comment {
     private Long replyToId;
 
     @ElementCollection
+    @JsonIgnore
     private List<Long> replyIds;
 
 }

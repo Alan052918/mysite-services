@@ -11,9 +11,10 @@ import java.time.ZonedDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostCreationRequest {
+public class CommentCreationRequest {
 
-    private String title;
+    private Long postId;
+    private Long replyToId;
     private Long userId;
 //    private ZonedDateTime dateTime;
     private String content;

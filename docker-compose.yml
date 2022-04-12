@@ -1,14 +1,14 @@
-version: "2"
+version: "2.3.3"
 
 services:
   user-account-postgres:
     image: postgres
     restart: unless-stopped
     environment:
-      - POSTGRES_DB=user_account
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: user_account
+      POSTGRES_NAME: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - user-account-postgres:/data/postgres
     ports:
@@ -18,10 +18,10 @@ services:
     image: mysql:oracle
     restart: unless-stopped
     environment:
-      - MYSQL_DATABASE=blog_post
-      - MYSQL_ROOT_PASSWORD=mysql
-      - MYSQL_USER=mysql
-      - MYSQL_PASSWORD=mysql
+      MYSQL_DATABASE: blog_post
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
     volumes:
       - blog-post-mysql:/var/lib/mysql
     ports:

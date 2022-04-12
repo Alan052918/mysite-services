@@ -1,7 +1,7 @@
 package com.example.blogpost.controller;
 
 import com.example.blogpost.entity.Post;
-import com.example.blogpost.modelassembler.BlogPostModelAssembler;
+import com.example.blogpost.modelassembler.PostModelAssembler;
 import com.example.blogpost.request.PostCreationRequest;
 import com.example.blogpost.service.PostService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/v1/posts")
 @Slf4j
-public class BlogPostController {
+public class PostController {
 
     private final PostService postService;
-    private final BlogPostModelAssembler postModelAssembler;
+    private final PostModelAssembler postModelAssembler;
 
     @Autowired
-    public BlogPostController(PostService postService, BlogPostModelAssembler postModelAssembler) {
+    public PostController(PostService postService, PostModelAssembler postModelAssembler) {
         this.postService = postService;
         this.postModelAssembler = postModelAssembler;
     }

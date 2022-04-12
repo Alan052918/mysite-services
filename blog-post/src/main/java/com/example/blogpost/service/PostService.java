@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +44,8 @@ public class PostService {
     @Transactional
     public Post createPost(PostCreationRequest postCreationRequest) {
         log.info("Create new post: {}", postCreationRequest);
-        LocalDateTime requestDateTime = LocalDateTime.now();
+        ZonedDateTime requestDateTime = ZonedDateTime.now();
+
         Post post = Post.builder()
                 .title(postCreationRequest.getTitle())
                 .userIdCreated(postCreationRequest.getUserId())
@@ -54,9 +56,11 @@ public class PostService {
                 .likeCount(0L)
                 .shareCount(0L)
                 .build();
+
         PostDetail postDetail = PostDetail.builder()
                 .content(postCreationRequest.getContent())
                 .build();
+
         post.setPostDetail(postDetail);
         postDetail.setPost(post);
         postDetailRepository.save(postDetail);
